@@ -8,22 +8,21 @@ function Main(props) {
   const [cards, setCards] = React.useState([])
 
 React.useEffect(
-  
   () => {
-
     Promise.all([api.getInitialCards(), api.getUserInfo()])
       .then(([initialCards, userData]) => {
         setUser(userData)
         setCards(initialCards)
       })
       .catch(err => console.log(`Ошибка:${err}`))
+  }, [])
 
-}, [])
+  const {onEditAvatar, onEditProfile, onAddPlace, onCardClick} = props
   
 return (
   <main className="main">
     <section className="profile">
-      <div className="profile__avatar-container" id="change-avatar" onClick={props.onEditAvatar}>
+      <div className="profile__avatar-container" id="change-avatar" onClick={onEditAvatar}>
         <img id="profile-avatar" className="profile__avatar" src={user.avatar ? user.avatar : loadingImage}
         alt="фотография профиля"/>
       </div>
@@ -34,13 +33,13 @@ return (
           <div className="profile__flex-group">
             <h1 id="profile-name" className="profile__name">{user.name}</h1>
             <button id="profile-edit-button" className="profile__edit-button"
-              type="button" data-button="popup-open" onClick={props.onEditProfile}></button>
+              type="button" data-button="popup-open" onClick={onEditProfile}></button>
           </div>
           <p id="profile-about" className="profile__about">{user.about}</p>
         </div>
 
         <button className="profile__add-button" type="button"
-          id="new-place-button" data-button="popup-open" onClick={props.onAddPlace}></button>
+          id="new-place-button" data-button="popup-open" onClick={onAddPlace}></button>
       </div>
     </section>
 
@@ -50,7 +49,7 @@ return (
           <Card 
             key={card._id}
             card={card}
-            onCardClick={props.onCardClick}
+            onCardClick={onCardClick}
           />
         ))}
     </section>

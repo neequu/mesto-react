@@ -3,7 +3,7 @@ import React from 'react';
 import Header from './Header.js'
 import Main from './Main.js'
 import Footer from './Footer.js'
-import PopupWithForm from './PopupWithForm.js'
+
 import ImagePopup from './ImagePopup.js'
 import ProfilePopup from './ProfilePopup.js';
 import AvatarPopup from './AvatarPopup.js';
@@ -26,7 +26,7 @@ function App() {
   // selected card
   const handleCardClick = (card) => {
     setSelectedCard(card)
-    setImagePopupOpen(!isImagePopupOpen)
+    setImagePopupOpen(true)
   }
   // close popups
   const closeAllPopups = () => {
@@ -47,28 +47,20 @@ function App() {
     />
     <Footer/>
 
-    <PopupWithForm 
+    <ProfilePopup 
       isOpen={isProfilePopupOpen}
       onClose={closeAllPopups}
-      name="profile"
-      title="Редактировать профиль"
-      children={<ProfilePopup/>}
     />
 
-    <PopupWithForm 
+    <AvatarPopup 
       isOpen={isAvatarPopupOpen}
       onClose={closeAllPopups}
-      name="avatar"
-      title="Обновить аватар"
-      children={<AvatarPopup/>}
+
     />
 
-    <PopupWithForm 
+    <PlacePopup 
       isOpen={isPlacePopupOpen}
       onClose={closeAllPopups}
-      name="place"
-      title="Новое место"
-      children={<PlacePopup/>}
     />
 
     <ImagePopup
