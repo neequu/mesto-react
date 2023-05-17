@@ -78,7 +78,7 @@ function App() {
     />
 
     {/* <PopupWithForm 
-      // isOpen={isEditProfilePopupOpen}
+      // isOpen={isProfilePopupOpen}
       onClose={closeAllPopups}
       name="confirm"
       title="Вы уверены?"
