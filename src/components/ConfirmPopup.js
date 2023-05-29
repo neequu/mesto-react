@@ -1,13 +1,13 @@
 import PopupWithForm from './PopupWithForm.js'
 
 function ConfirmPopup(props) {
-  const {isOpen, onClose, onSubmit} = props
+  const {isOpen, onClose, onSubmit, isDeletingCard} = props
 
   return (
     <PopupWithForm
       name="confirm"
       title="Вы уверены?"
-      buttonText="Да"
+      buttonText={isDeletingCard ? 'Загрузка...' : 'Да'}
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={onSubmit}

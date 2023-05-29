@@ -3,7 +3,7 @@ import {useRef} from 'react'
 
 
 function AvatarPopup(props) {
-    const {isOpen, onClose, onUpdateAvatar} = props
+    const {isOpen, onClose, onUpdateAvatar, isLoadingAvatar} = props
     const avatar = useRef(null);
 
     const handleSubmit = () => { 
@@ -18,7 +18,7 @@ function AvatarPopup(props) {
           title="Обновить аватар"
           isOpen={isOpen}
           onClose={onClose}
-          buttonText="Сохранить"
+          buttonText={isLoadingAvatar ? 'Сохранение...' :'Сохранить'}
           onSubmit={handleSubmit}
         >
             <input 

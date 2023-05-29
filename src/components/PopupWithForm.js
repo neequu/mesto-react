@@ -1,8 +1,9 @@
 function PopupWithForm(props) {
     const {isOpen, name, onClose, children, buttonText, title, onSubmit} = props
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
       e.preventDefault()
       onSubmit()
+      await new Promise(res => setTimeout(res, 1000))
       e.target.reset()
     }
     
@@ -23,7 +24,12 @@ function PopupWithForm(props) {
           >
             <fieldset className="form__set">
               {children}
-              <button type="submit" className="form__submit-button" onClick={onClose}>{buttonText}</button>
+              <button 
+                type="submit" 
+                className="form__submit-button" 
+              >
+              {buttonText}
+              </button>
             </fieldset>
           </form>
         </div>

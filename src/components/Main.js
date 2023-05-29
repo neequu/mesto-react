@@ -20,11 +20,11 @@ return (
 
         <div className="profile__person-info">
           <div className="profile__flex-group">
-            <h1 id="profile-name" className="profile__name">{currentUser.name}</h1>
+            <h1 id="profile-name" className="profile__name">{currentUser.name || 'loading...'}</h1>
             <button id="profile-edit-button" className="profile__edit-button"
               type="button" data-button="popup-open" onClick={onEditProfile}></button>
           </div>
-          <p id="profile-about" className="profile__about">{currentUser.about}</p>
+          <p id="profile-about" className="profile__about">{currentUser.about || 'loading...'}</p>
         </div>
 
         <button className="profile__add-button" type="button"

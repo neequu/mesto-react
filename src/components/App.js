@@ -26,16 +26,24 @@ function App() {
   const [cards, setCards] = React.useState([]) 
   const [deletingCard, setDeletingCard] = React.useState({})
 
+  const [isLoadingUserData, setIsLoadingUserData] = React.useState(false);
+  const [isLoadingPlace, setIsLoadingPlace] = React.useState(false);
+  const [isLoadingAvatar, setIsLoadingAvatar] = React.useState(false);
+  const [isDeletingCard, setIsDeletingCard] = React.useState(false);
 
   React.useEffect(() => {
     const fetchData = async () => {
-      const [initialCards, userData] = await Promise.all([api.getInitialCards(), api.getUserInfo()])
-      setCurrentUser(userData)
-      setCards(initialCards)
+      try {
+        const [initialCards, userData] = await Promise.all([api.getInitialCards(), api.getUserInfo()])
+        setCurrentUser(userData)
+        setCards(initialCards)
+      } catch (e) {
+        console.log(e)
+      } 
     }
   
     fetchData()
-      .catch(err => console.log(`Ошибка: ${err}`))
+
   }, [])
 
   // profile
@@ -54,26 +62,34 @@ function App() {
     setConfirmPopupOpen(false)
     setSelectedCard({});
   }
+
     // selected card
   const handleCardClick = async (card) => {
     setSelectedCard(card)
-    await new Promise(res => setTimeout(res, 150))
     setImagePopupOpen(true)
   }
 
   const handleCardLike = async (card) => {
     const isLiked = card.likes.some(i => i._id === currentUser._id)
-    const res = await api.changeLikeCardStatus(card._id, isLiked)
-    setCards(state => state.map(c => c._id === card._id ? res : c))
-  } 
-
-  const handleCardDelete = async () => {
     try {
-      await api.deleteCard(deletingCard._id)
-      setCards(state => state.filter(c => c._id !== deletingCard._id))
+      const res = await api.changeLikeCardStatus(card._id, isLiked)
+      setCards(state => state.map(c => c._id === card._id ? res : c))
 
     } catch (e) {
       console.log(e)
+    }
+  } 
+
+  const handleCardDelete = async () => {
+    setIsDeletingCard(true)
+    try {
+      await api.deleteCard(deletingCard._id)
+      setCards(state => state.filter(c => c._id !== deletingCard._id))
+      closeAllPopups()
+    } catch (e) {
+      console.log(e)
+    } finally {
+      setIsDeletingCard(false)
     }
   }
 
@@ -83,35 +99,43 @@ function App() {
   }
 
   const handleUpdateUser = async (user) => {
+    setIsLoadingUserData(true)
     try {
       const res = await api.editUserInfo(user)
       setCurrentUser(res)
       closeAllPopups()
     } catch (e) {
       console.log(e)
+    } finally {
+      setIsLoadingUserData(false)
     }
   }
 
   const handleUpdateAvatar = async (a) => {
+    setIsLoadingAvatar(true)
     try {
       const res = await api.editAvatar(a)
       setCurrentUser(res)
       closeAllPopups()
     } catch (e) {
       console.log(e)
+    } finally {
+      setIsLoadingAvatar(false)
     }
   }
 
   const handleAddPlace = async place => {
+    setIsLoadingPlace(true)
     try {
       const res = await api.addCard(place)
       setCards([res, ...cards])
       closeAllPopups()
     } catch (e) {
       console.log(e)
+    } finally {
+      setIsLoadingPlace(false)
     }
   }
-
   return (
   <>
     <CurrentUserContext.Provider value={currentUser}>
@@ -131,18 +155,21 @@ function App() {
       isOpen={isProfilePopupOpen}
       onClose={closeAllPopups}
       onUpdateUser={handleUpdateUser}
+      isLoadingUserData={isLoadingUserData}
     />
 
     <AvatarPopup 
       isOpen={isAvatarPopupOpen}
       onClose={closeAllPopups}
       onUpdateAvatar={handleUpdateAvatar}
+      isLoadingAvatar={isLoadingAvatar}
     />
 
     <PlacePopup 
       isOpen={isPlacePopupOpen}
       onClose={closeAllPopups}
       onAddPlace={handleAddPlace}
+      isLoadingPlace={isLoadingPlace}
     />
 
     <ImagePopup
@@ -154,6 +181,7 @@ function App() {
       isOpen={isConfirmPopupOpen}
       onClose={closeAllPopups}
       onSubmit={handleCardDelete}
+      isDeletingCard={isDeletingCard}
     />
     </CurrentUserContext.Provider>
   </>

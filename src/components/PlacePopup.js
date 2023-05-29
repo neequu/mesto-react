@@ -2,7 +2,7 @@ import React from 'react'
 import PopupWithForm from './PopupWithForm.js'
 
 function PlacePopup(props) {
-    const {isOpen, onClose, onAddPlace} = props
+    const {isOpen, onClose, onAddPlace, isLoadingPlace} = props
     const [placeName, setPlaceName] = React.useState(null)
     const [placeLink, setPlaceLink] = React.useState(null)
 
@@ -19,7 +19,7 @@ function PlacePopup(props) {
           title="Новое место"
           isOpen={isOpen}
           onClose={onClose}
-          buttonText="Создать"
+          buttonText={isLoadingPlace ? 'Создание...' : 'Создать'}
           onSubmit={handleSubmit}
         >
             <input 
