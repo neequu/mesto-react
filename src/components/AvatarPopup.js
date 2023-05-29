@@ -1,7 +1,17 @@
 import PopupWithForm from './PopupWithForm.js'
+import {useRef} from 'react'
+
 
 function AvatarPopup(props) {
-    const {isOpen, onClose} = props
+    const {isOpen, onClose, onUpdateAvatar} = props
+    const avatar = useRef(null);
+
+    const handleSubmit = () => { 
+      onUpdateAvatar({
+        avatar: avatar.current.value,
+      });
+
+    }
     return (
         <PopupWithForm
           name="avatar"
@@ -9,6 +19,7 @@ function AvatarPopup(props) {
           isOpen={isOpen}
           onClose={onClose}
           buttonText="Сохранить"
+          onSubmit={handleSubmit}
         >
             <input 
               id="avatar-link" 
@@ -18,13 +29,10 @@ function AvatarPopup(props) {
               placeholder="Ссылка на картинку" 
               name="link" 
               required
+              ref={avatar}
             />
 
-            <span 
-              id="avatar-link-error" 
-              className="form__input-error"
-            >
-            </span>
+            <span id="avatar-link-error" className="form__input-error"></span>
         </PopupWithForm>
   );
   }
